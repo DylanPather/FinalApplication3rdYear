@@ -1,0 +1,113 @@
+﻿@model APPDEVInc2.ViewModels.Customer.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Cart |";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<partial name="_StatusMessage" model="@Model.CartTotal" />
+<form method="post">
+    @{
+        decimal total = 0;
+    }
+    @if (Model.CartItems.Count > 0)
+    {
+        <br />
+        <input id="userId" asp-for="@Model.CartItems[0].CID" hidden />
+
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Shopping Cart
+                    </div>
+                    <div class="col-6 text-right">
+                        <input type="button" class="btn btn-info btn-sm" value="Continue Shopping" onclick="location.href='@Url.Action("Index", "Customer")'" />
+
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.CartItems)
+                    {
+
+                        <div class="row">
+                            @{var base64 = Convert.ToBase64String(item.StockTbl.TyresTbl.Image);
+                                var imgsrc = string.Format("data:image/png;base64,{0}", base64);
+
+
+                            }
+                            <div class="d-none d-lg-block col-lg-2 text-center py-2">
+                                <img src="@imgsrc" class="rounded" width="120" height="80" />
+                            </div>
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                <h4><strong>@item.StockTbl.TyresTbl.TyreSize</strong></h4>
+                                <h4><small>@item.StockTbl.TyresTbl.TyreName</small></h4>
+                                <h4><small>@item.StockTbl.TyresTbl.TyreBrand</small></h4>
+                            </div>
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                <div class="col-4 text-md-right" style="padding-top:5px;">
+                                    <h6><strong>R @item.StockTbl.TyresTbl.SellingPrice <span class="text-muted">x</span>@item.Count </strong></h6>
+                                    <h5><strong>Item Total : R @(item.StockTbl.TyresTbl.SellingPrice*item.Count) </strong></h5>
+                                </div>
+                                <div class="col-6 col-sm-4 col-lg-6">
+                                    <div class="float-right mx-1">
+                                        <a href="@Url.Action("IncreaseQTY", "ShoppingCart", new { id = item.StockTbl.StockID})">
+                                            <i class="fa fa-plus" style="color: #a721bb;font-size:20px"></i>
+                                        </a>
+
+                                    </div>
+                                    <div class="float-right mx-1">
+                                        <a href="@Url.Action("DecreaseQTY", "ShoppingCart", new { id = item.StockTbl.StockID})">
+                                            <i class="fa fa-minus" style="color: #a721bb;font-size:20px"></i>
+                                        </a>
+
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                        </div>
+                        <hr />
+                        total += (item.StockTbl.TyresTbl.SellingPrice * item.Count);
+                    }
+                    <h4><strong>Checkout Total : R @total</strong></h4>
+                    <h4><small>Shipping Costs will be added when you proceed...</small></h4>
+                </div>
+
+            </div>
+
+
+        </div>
+        <button type="submit" class="btn btn-success center-block" ; style="background-color: #52eb34;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+        border-color: #008000;
+        text-align: center;
+        width: 148px;">
+            @Html.ActionLink("Checkout >> ", "CheckOutDetail", "ShoppingCart")
+        </button>
+    }
+    else
+    { <br />
+        <br />
+        <br />
+        <h2><strong>Your Cart is Empty :(</strong></h2>
+    }
+
+
+</form>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

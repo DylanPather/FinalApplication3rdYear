@@ -1,0 +1,28 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.PayFastShipping>
+@{
+    ViewBag.Title = "ViewPickUpCode";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Pick Up Code View</h2>
+
+</br>
+@{ 
+    var imgsrc = "";
+}
+@foreach (var item in Model)
+{
+
+
+        {var base64 = Convert.ToBase64String(item.DispatchSignImage);
+             imgsrc = string.Format("data:image/png;base64,{0}", base64);
+        }
+
+          
+                <div class="d-none d-lg-block col-lg-2 text-center py-2">
+                    <img src="@imgsrc" class="rounded" width="250" height="250" />
+                </div>
+            
+
+
+        }

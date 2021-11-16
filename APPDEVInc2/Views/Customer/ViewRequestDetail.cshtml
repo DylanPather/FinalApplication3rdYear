@@ -1,0 +1,142 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.RequestAssistanceTbl>
+@using APPDEVInc2.Repository;
+@using APPDEVInc2.DataBaseModels;
+@using APPDEVInc2.Models;
+@{
+    ViewBag.Title = "Request Detail";
+    Layout = "~/Views/Shared/_LayoutOrderDetail.cshtml";
+
+}
+
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<style>
+
+
+    .btn {
+        display: block;
+        border: none;
+        background-color: #34eb55;
+        color: white;
+        letter-spacing: 2px;
+        font-family: 'Lato', sans-serif;
+        font-size: 17px;
+        transition: .2s all ease-in-out;
+        border-bottom: 2px solid transparent;
+        outline: none;
+        text-align: center;
+        width: 100px;
+    }
+
+    .btn-back-button {
+        display: block;
+        border: none;
+        background-color: #07f50b;
+        color: darkseagreen;
+        letter-spacing: 2px;
+        font-family: 'Lato', sans-serif;
+        font-size: 20px;
+        transition: .2s all ease-in-out;
+        border-bottom: 2px solid transparent;
+        outline: none;
+        text-align: center;
+        width: 100px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+
+    th, td {
+        font-size: 14px;
+    }
+</style>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container-fluid">
+    @{ var item = Model;
+        var imgsrcx = "";}
+    @foreach (var x in item)
+    {
+        if (x.QRCodeCheckIn != null)
+        {
+            var base64x = Convert.ToBase64String(x.QRCodeCheckIn);
+            imgsrcx = string.Format("data:image/png;base64,{0}", base64x);
+        }
+
+
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="row p-5">
+                            <div class="col-md-6">
+                                <img src="~/Images/Vees Tyre and Alignment.jpg" style="width:500px;height:150px">
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p class="font-weight-bold mb-1">Request ID : @x.RequestID </p>
+                                <p class="text-muted">Current Date: @DateTime.Now</p>
+                            </div>
+                        </div>
+                        <hr class="my-5">
+                        <div class="row pb-5 p-5">
+                            <div class="col-md-6">
+                                @{
+                                    string mechanicname = "";
+                                    string mechaniclast = "";
+                                    string contactno = "";
+                                    string vehiclemake = "";
+                                    string regno = "";
+
+                                    ApplicationDbContext db = new ApplicationDbContext();
+                                    var mechanicid = db.CalloutTbls.Where(a => a.RequestID == x.RequestID);
+                                    foreach (var a in mechanicid)
+                                    {
+                                        mechanicname = a.MechanicTbl.FirstName;
+                                        mechaniclast = a.MechanicTbl.LastName;
+                                        contactno = a.MechanicTbl.ContactNo;
+                                        vehiclemake = a.MechanicTbl.VehicleMake;
+                                        regno = a.MechanicTbl.VehicleRegNo;
+                                    }
+                                }
+
+                                @if (x.QRCodeCheckIn != null)
+                                {<h2 class="mb-1">Provide Mecahanic With QR Code When They Arrive:</h2>
+                                    <img src="@imgsrcx" class="rounded" width="250" height="200" />
+                                    <div class="col-md-6 text-right">
+                                        <h2>Mechanic Details:</h2>
+                                        <p class="font-weight-bold mb-1">Name : @mechanicname @mechaniclast </p>
+                                        <p class="text-muted">Contact No : @contactno</p>
+                                        <p class="text-muted">Vehicle Make : @vehiclemake</p>
+                                        <p class="text-muted">Registration Plate : @regno</p>
+                                    </div>
+
+
+
+
+                                }
+                                else
+                                {
+                                    <h2 class="mb-1">Still Pending Callout:</h2>
+                                }
+
+                            </div>
+                           
+                        </div>
+                       
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="text-light mt-5 mb-5 text-center small">by : <a class="text-light" target="_blank" href="">Vees Tyre and Alignment © </a></div>
+
+</div>

@@ -1,0 +1,90 @@
+﻿@model APPDEVInc2.ViewModels.Customer.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Final Cart |";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<partial name="_StatusMessage" model="@Model.CartTotal" />
+<form method="post">
+    @if (Model.CartItems.Count > 0)
+    {
+        <br />
+        <input id="userId" asp-for="@Model.CartItems[0].CID" hidden />
+
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Shopping Cart Summary
+                    </div>
+                    <div class="col-6 text-right">
+                        <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-info btn-sm">Continue Shopping</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.CartItems)
+                    {
+
+                        <div class="row">
+                            @{var base64 = Convert.ToBase64String(item.StockTbl.TyresTbl.Image);
+                                var imgsrc = string.Format("data:image/png;base64,{0}", base64);
+                            }
+                            <div class="d-none d-lg-block col-lg-2 text-center py-2">
+                                <img src="@imgsrc" class="rounded" width="120" height="80" />
+                            </div>
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                <h4><strong>@item.StockTbl.TyresTbl.TyreSize</strong></h4>
+                                <h4><small>@item.StockTbl.TyresTbl.TyreName</small></h4>
+                                <h4><small>@item.StockTbl.TyresTbl.TyreBrand</small></h4>
+                            </div>
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                <div class="col-4 text-md-right" style="padding-top:5px;">
+                                    <h5><strong>R @item.StockTbl.TyresTbl.SellingPrice <span class="text-muted">x</span>@item.Count </strong></h5>
+                                </div>
+                                <div class="col-4 text-md-right" style="padding-top:5px;">
+                                    <h4><strong>Unit Total: R @(item.StockTbl.TyresTbl.SellingPrice * item.Count) </strong></h4>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <hr />
+
+                    }
+                    <h4><strong>Total Order Cart: R @(Model.CartTotal)</strong></h4>
+                    <h4><small>Estimated Shipping Cost: R @(Model.DeliveryCost). Please Continue.. </small></h4>
+                </div>
+
+            </div>
+           
+
+        </div>
+
+    }
+    <a class="btn btn-danger" href=@Url.Action("Index", "ShoppingCart") style="background-color: #e5280f;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 148px;">Go Back</a>
+    <a class="btn btn-danger" href=@Url.Action("AddressSelection", "ShoppingCart") style="background-color: #0bfc03;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 240px;">Proceed To Shipping Details</a>
+
+</form>

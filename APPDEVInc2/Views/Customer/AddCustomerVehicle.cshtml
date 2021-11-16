@@ -1,0 +1,65 @@
+﻿@model APPDEVInc2.DataBaseModels.VehicleTbl
+
+@{
+    ViewBag.Title = "Add Your Vehicle";
+}
+
+<br />
+<br />
+<br />
+
+<h2>Add Your Vehicle Detail</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Vehicle Entry</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+         
+            <div class="col-md-10">
+
+                Registration No.   @Html.EditorFor(model => model.VehicleRegNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VehicleRegNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+          
+            <div class="col-md-10">
+                Make Of Vehicle  @Html.EditorFor(model => model.VehicleMake, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VehicleMake, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+          
+            <div class="col-md-10">
+                Model Of Vehicle   @Html.EditorFor(model => model.VehicleModel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VehicleModel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+          
+            <div class="col-md-10">
+                Mileage Of Vehicle  @Html.EditorFor(model => model.VehicleMileage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VehicleMileage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+

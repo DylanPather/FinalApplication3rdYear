@@ -1,0 +1,55 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.ToolBoxToolDetail>
+
+@{
+    ViewBag.Title = "ToolBoxAssign";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Tools In ToolBox</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Item
+        </th>
+        <th>
+            Brand
+        </th>
+
+    </tr>
+    @{ int toolboxid = 0;}
+    @foreach (var item in Model)
+    {
+        toolboxid = item.ToolBoxID;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToolsTbl.ToolName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToolsTbl.ToolBrand)
+            </td>
+
+        </tr>
+    }
+
+</table>
+<a class="btn btn-danger" href=@Url.Action("AssignToolBoxForMechanic", "Admin") style="background-color: #ff031c;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #ff031c;
+        text-align: center;
+        justify-content: center;
+        width: 240px;">Back</a>
+<a class="btn btn-danger" href=@Url.Action("ConfirmToolBox", "Admin", new { id = toolboxid}) style="background-color: #0bfc03;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 240px;">Confirm</a>
+

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.CalloutReportDetailTbl>
+
+
+@{
+    ViewData["Title"] = "Payment Method";
+    Layout = "~/Views/Shared/_LayoutMechanic.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<form method="post">
+
+    <br />
+    @{
+        decimal total = 0;
+        int reportid = 0;
+    }
+
+    <div class="align-content-center">
+        <div class="container">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-6">
+                    <i class="fa fa-shopping-cart"></i> &nbsp;
+                    Payment Selection:
+                </div>
+
+            </div>
+            <div class="card-body">
+                @foreach (var item in Model)
+                {
+
+
+
+
+                    reportid = item.CalloutReportID;
+
+                    total += (decimal)(item.Price * item.Quantity);
+                }
+                <h4><strong>Payment Total: R @total</strong></h4>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <a class="btn btn-danger" href=@Url.Action("PayNow", "PayFastMechanic", new { id = reportid}) style="background-color: #0bfc03;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 240px;">CARD/VISA</a>
+    <a class="btn btn-danger" href=@Url.Action("CashPayment", "Mechanic",new { id = reportid}) style="background-color: #0bfc03;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 240px;">CASH</a>
+
+</form>

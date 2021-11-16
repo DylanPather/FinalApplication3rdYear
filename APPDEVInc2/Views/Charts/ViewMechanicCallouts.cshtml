@@ -1,0 +1,63 @@
+﻿@model APPDEVInc2.DataBaseModels.CalloutTbl
+@{
+    ViewBag.Title = "MostValuedCustomer";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+}
+
+<br />
+<br />
+<br />
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+    </p>
+</figure>
+
+
+<script>
+    $(document).ready(function () {
+        $.getJSON("/Charts/MechanicCallouts", function (data) {
+            var Names = []
+            var Qts = []
+            for (var i = 0; i < data.length; i++) {
+                Names.push(data[i].name);
+                Qts.push(data[i].count);
+            }
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Mechanic Callouts Frequency'
+                },
+                xAxis: {
+                    categories: Names
+                },
+                yAxis: {
+                    title: {
+                        text: 'No. of Callouts Attended'
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: true
+                        },
+                        enableMouseTracking: true
+                    }
+                },
+                series: [{
+                    name: 'Callouts Completed',
+                    data: Qts
+                }]
+            });
+        });
+    });
+</script>

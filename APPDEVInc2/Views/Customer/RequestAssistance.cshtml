@@ -1,0 +1,307 @@
+﻿@model APPDEVInc2.DataBaseModels.RequestAssistanceTbl
+
+@{
+    ViewBag.Title = " Submit Request Assistance";
+}
+
+
+
+<br />
+<br />
+
+@using (Html.BeginForm())
+{
+   
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Request Assistance</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="container">
+            <!-- Content Start -->
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                <strong>Note:</strong> Please allow access to your location to properly find your pickup and drop off address.
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div style="overflow: hidden; height: 500px;">
+                        <div id="mapCanvas" style="height: 500px;"></div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-4 col-md-5 col-sm-5">
+
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></div>
+                            <textarea class="form-control" type="text" placeholder="Please describe current problem experienced here" name="DescriptionOfProblem" id="Description"></textarea>
+                            @Html.ValidationMessageFor(model => model.DescriptionOfProblem, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                            <input class="form-control" type="text" placeholder="Pick-up Address" name="RequestAddress" id="PickupAddress" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input class="form-control" type="hidden" value="430 Longbury Drive, Longcroft, Phoenix, South Africa" placeholder="Drop-off Address" name="DropOffAdd" id="DropOffAddress" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-lg-4 col-md-5 col-sm-5">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <h4><span class="label-warning">Your Request Location Is:</span></h4>
+                            <h3><b><span id="spanPick"></span></b></h3>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <h4><span class="label-warning">Driver Departure address is</span></h4><h3><b><span id="spanDrop"></span></b></h3>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <h4><span class="label-warning">Travel Mode</span></h4><h3><b><span name="TravelMode" id="spanTravelMode"></span></b></h3>
+                            @Html.HiddenFor(model => model.TravelMode, new { id = "mode" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <h4><span class="label-warning">Total distance</span></h4><h3><b><span name="TotalDistance" id="spanDist"></span></b></h3>
+                            @Html.HiddenFor(model => model.TotalDistance, new { id = "dista" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <h4><span class="label-warning">Total time</span></h4><h3><b><span name="TotalTime" id="spanTime"></span></b></h3>
+                            @Html.HiddenFor(model => model.TotalTime, new { id = "time" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit Request" class="btn btn-default"  />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBFvgq3AdVcSBmTHS8jzWejWj_mZfA5m9o">
+
+    </script>
+    <script src="~/Scripts/jquery.geocomplete.js"></script>
+    <script type="text/javascript">
+        var map;
+        var latlong;
+        var directionsService;
+        var directionsDisplay;
+        var geocoder;
+        var geolatitude;
+        var geolongitude;
+        var pickUpLatLong;
+        var dropOffLatLong;
+
+        $(document).ready(function () {
+            //map initialize
+            initialize();
+        });
+
+        function initialize() {
+
+            navigator.geolocation.getCurrentPosition(doStuff, error, setOptions);
+
+            function setOptions(geoLoc) {
+                geoLoc.enableHighAccuracy = true;
+                geoLoc.timeout = 30;
+                geoLoc.maximumAge = 0;
+            }
+
+            function doStuff(geoLoc) {
+                latlong = new google.maps.LatLng(geoLoc.coords.latitude, geoLoc.coords.longitude);
+                geolatitude = geoLoc.coords.latitude;
+                geolongitude = geoLoc.coords.longitude;
+
+                var mapOptions = {
+                    center: latlong,
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var image = 'img/home_alt.png';
+                map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
+
+                marker = new google.maps.Marker({
+                    position: LatLng,
+                    map: map,
+                    icon: image
+                });
+            }
+        }
+
+        function error(geoLoc) {
+            doStuff("true");
+        }
+
+        $(function () {
+            $("#PickupAddress")
+                .geocomplete()
+                .bind("geocode:result", function (event, result) {
+                    $("#spanPick").text($("#PickupAddress").val());
+                    pickUpLatLong = new google.maps.LatLng(result.geometry.location.lat(), result.geometry.location.lng());
+                    routeDirection("PickupAddress", pickUpLatLong);
+                    $("#spanDrop").text($("#DropOffAddress").val());
+                    dropOffLatLong = new google.maps.LatLng(-29.708120238782474, 31.014533910251586);
+                    routeDirection("DropOffAddress", dropOffLatLong);
+                });
+        });
+
+
+
+        function routeDirection(id, latLong) {
+            geocoder = new google.maps.Geocoder();
+            var mapOptions = {
+                zoom: 15,
+                center: latLong,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
+            var start = $("#PickupAddress").val();
+            var end = $("#DropOffAddress").val();
+            if (start != null && (end == null || end == '')) {
+                geocoder.geocode({ "address": start }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var image = "/img/home_alt.png";
+                        map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
+                        marker = new google.maps.Marker({
+                            position: latLong,
+                            map: map,
+                            icon: image
+                          
+                        });
+                    }
+                });
+            }
+            else if (end != null && (start == null || start == '')) {
+                geocoder.geocode({ "address": end }, function (results, status) { 
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
+                        marker = new google.maps.Marker({
+                            position: latLong,
+                            map: map,
+                        });
+                    }
+                });
+            }
+            else {
+                getRoute(pickUpLatLong, dropOffLatLong);
+            }
+        }
+
+        function getRoute(pickUp, dropOff) {
+            directionsService = new google.maps.DirectionsService();
+            var mapOptions = {
+                zoom: 15
+            };
+            map = new google.maps.Map(document.getElementById('mapCanvas'), mapOptions);
+            var rendererOptions = {
+                map: map,
+                suppressMarkers: true
+            };
+
+            directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+
+            var request = {
+                origin: pickUp,
+                destination: dropOff,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                    var leg = response.routes[0].legs[0];
+                    $("#spanDist").text(leg.distance.text);
+                    $("#spanTime").text(leg.duration.text);
+                    $("#spanTravelMode").text(response.request.travelMode);
+                    var t = document.getElementById("spanTime").innerText;
+                    var d = document.getElementById("spanDist").innerText;
+                    var tm = document.getElementById("spanTravelMode").innerText;
+                    document.getElementById("time").value = t /*document.getElementById("spanTime").innerText(leg.duration.text)*//*$("#spanTime").text(leg.duration.text)*/;
+                    document.getElementById("dista").value = d;
+                    document.getElementById("mode").value = tm;
+                    makeMarker(leg.start_location, "pickup location");
+                    makeMarker(leg.end_location, "dropoff location");
+                    //var dist = document.getElementById("spanDist").val();
+
+                }
+            });
+        }
+
+        function makeMarker(position, title) {
+            if (title == "pickup location") {
+                new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    title: "Callout Location"
+                });
+            }
+            else {
+                var image = "/img/home_alt.png";
+                new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: image,
+                    title: "Driver Departure Location"
+                });
+            }
+        }
+
+
+
+
+
+
+    </script>
+  
+    <script>
+        function cartMessage() {
+
+            if (@ViewBag.Count > 0) {
+                alert("Sorry But You Already Have a pending Request :( ")
+            }
+            else {
+                alert("Request submitted successfully :) ")
+            }
+
+
+        }
+
+
+
+    </script>
+}

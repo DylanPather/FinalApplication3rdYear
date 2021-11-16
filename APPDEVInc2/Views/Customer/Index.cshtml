@@ -1,0 +1,218 @@
+﻿@model APPDEVInc2.ViewModels.Customer.HomeIndexViewModel
+@using PagedList;
+@using PagedList.Mvc;
+@using APPDEVInc2.Repository;
+@using APPDEVInc2.DataBaseModels;
+@{
+    ViewBag.Title = "Tyre Catalogue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+<style>
+    body {
+        margin: 0px;
+        position: relative;
+        left: 0px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .page-header {
+        text-align: center;
+        position: center;
+        justify-content: center;
+        font-family: Arial;
+        font-size: 35px;
+        color: #abd14c;
+    }
+
+    .AddToCart {
+        text-align: center;
+        position: center;
+        justify-content: center;
+        font-family: Arial;
+        font-size: 15px;
+        color: darkgrey;
+    }
+
+    .Addtocartbutton {
+        background-color: transparent;
+        color: black;
+        border-color: transparent;
+        font-size: 21px;
+        text-align: center;
+        position: center;
+        justify-content: center;
+    }
+
+        .Addtocartbutton:hover {
+            background-color: transparent;
+            color: #abd14c;
+            border-color: transparent;
+            position: center;
+            text-align: center;
+            position: center;
+            justify-content: center;
+        }
+
+    .btn-default.Addtocartbutton:hover {
+        color: black;
+        background-color: #abd14c;
+        font-family: 'Lato', sans-serif;
+        font-size: 16px;
+        border: none;
+        box-shadow: 0px 0 20px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-default.Addtocartbutton {
+        color: white;
+        background-color: black;
+        font-family: 'Lato', sans-serif;
+        font-size: 16px;
+        box-shadow: 0px 0 20px 0 rgba(0,0,0,0.2);
+    }
+
+    .row.product-container {
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        color: black;
+    }
+
+    .caption {
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        color: black;
+    }
+
+    .ProductName {
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        color: black;
+        font-weight: bold;
+    }
+
+    .ProductPrice {
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        color: black;
+    }
+
+    .header img {
+        width: 100%;
+        text-align: center;
+        position: center;
+        justify-content: center;
+        z-index: -1;
+    }
+
+    .DecorCatalogueHeading {
+        text-align: center;
+        position: center;
+        justify-content: center;
+        font-family: Arial;
+        font-size: 75px;
+        color: rgba(255, 255, 255, 0.84);
+        font-weight: bold;
+    }
+</style>
+
+<body>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <div id="themeSlider" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="imgOverlay"></div>
+                <img style="width:200%" src="~/Images/Tyrebanner.jpg" alt="First slide">
+                <div class="carousel-caption" style="">
+                    <p class="DecorCatalogueHeading">Tyre Catalogue</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="olContent f1"><h3>Search for a Tyre</h3></div>
+    <form method="post">
+        <div class="olSearch fr">
+            <input style="width:1075px;" type="text" name="search" placeholder="Enter a keyword" class="inputComn form-control" />
+        </div>
+    </form>
+    <h2 class="page-header">All Tyres</h2>
+    <div class="row product-container" style="width:1125px;position:center; justify-content:center;margin-top:15px">
+        @foreach (var item in Model.ListOfProducts)
+        {
+            GenericUnitOfWork unitOfWork = new GenericUnitOfWork();
+            var qty = unitOfWork.GetRepositoryInstance<StockTbl>().GetAllRecordsIQueryable().Where(a => a.TyreID == item.TyreID).ToList();
+
+            <div class="col-md-3 col-sm-3 col-xs-6" style="margin-bottom:15px; align-content:center;align-items:center;text-align:center;justify-content:center;">
+                <div class="thumbnail product-item" style="height:435px; position:center; box-shadow: 0px 0 10px 0 rgba(0,0,0,0.2);">
+                    @{var base64 = Convert.ToBase64String(item.Image);
+                        var imgsrc = string.Format("data:image/png;base64,{0}", base64);
+                    }
+                    <img class="img-responsive" title="Click to View Product detail"
+                         style="cursor:pointer;height:200px;width:91%;justify-content:center;text-align:center;margin:10px;"
+                         src="@imgsrc" />
+                    
+                    <div class="caption">
+                        <p class="Tyre Size">@item.TyreSize</p>
+                        <p class="Tyre Code"><h4><small> @item.TyreName</small></h4></p>
+                        @foreach (var x in qty)
+                        {
+                            <p class="Item Qty"><h4><small>QTY: @x.Quantity</small></h4></p>
+                        }
+
+                        <p class="ProductPrice"><h4><strong>R @item.SellingPrice </strong></h4></p>
+                        <p>
+                            @foreach (var a in qty)
+                            {
+                                if (a.Quantity < 4)
+                                {
+
+
+                                    <h4>Last Quantity Reserved</h4>
+                                }
+                                else
+                                {
+                                    using (Html.BeginForm("AddToCart", "ShoppingCart", new { id = item.TyreID, url = "Index" }, FormMethod.Post))
+                                    {
+                                        <button type="submit" onclick="cartMessage()" class="Addtocartbutton" style="justify-content:center;position:center;"><i class="fas fa-cart-plus"> Add to Cart</i></button>
+                                    }
+
+                                }
+
+                            }
+
+
+
+
+
+</div>
+                </div>
+            </div>
+
+
+        }
+
+
+    </div>
+    <div class="container">
+        @Html.PagedListPager(Model.ListOfProducts, page => Url.Action("Index", new { page, search = Request.QueryString["search"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayItemSliceAndTotal = true })
+    </div>
+
+    <script>
+        function cartMessage() {
+            alert("Item added to cart!")
+        }
+    </script>
+</body>

@@ -1,0 +1,82 @@
+﻿@model APPDEVInc2.DataBaseModels.BookingTbl
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui-timepicker-addon.min.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Complete Booking";
+    Layout = "~/Views/Shared/_LayoutAdminCapture.cshtml";
+}
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/jquery-ui-timepicker-addon.min.js"></script>
+
+@{ List<SelectListItem> data = ViewBag.BayList; }
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BayID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.BayID, data, "---Select---", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BayID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateBooked, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateBooked, new { htmlAttributes = new { @class = "form-control date-time-picker" } })
+                @Html.ValidationMessageFor(model => model.DateBooked, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker-addon.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $(".date-time-picker").datetimepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-100:+0",
+                    minDate: 0,
+                    dateFormat: 'dd-M-yy',
+                    controlType: 'select',
+                    timeFormat: 'hh:mm TT'
+                });
+            });
+
+            jQuery.validator.methods.date = function (value, element) {
+                var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+                if (isChrome) {
+                    var d = new Date();
+                    return this.optional(element) || !/Invalid|NaN/.test(new Date(d.toLocaleDateString(value)));
+                } else {
+                    return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
+                }
+            };
+        });
+    </script>
+}

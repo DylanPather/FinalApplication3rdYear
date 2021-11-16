@@ -1,0 +1,115 @@
+﻿@model APPDEVInc2.ViewModels.Mechanic.CalloutReportCartViewModel
+
+@{
+    ViewData["Title"] = "Report Callout |";
+    Layout = "~/Views/Shared/_LayoutMechanic.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<partial name="_StatusMessage" model="@Model.CartTotal" />
+<form method="post">
+    @{
+        decimal tyrestotal = 0;
+        decimal servicetotal = 0;
+    }
+    @if (Model.CartItems.Count > 0)
+    {
+        <br />
+        <input id="userId" asp-for="@Model.CartItems[0].VehicleID" hidden />
+
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Callout Report Summary
+                    </div>
+                    <div class="col-6 text-right">
+                        <input type="button" class="btn btn-info btn-sm" value="Continue Report" onclick="location.href='@Url.Action("GenerateReport", "Mechanic")'" />
+
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.CartItems)
+                    {
+
+
+
+                        <div class="row">
+                           
+                                <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                    <h4><strong>@item.CalloutServices.Name</strong></h4>
+                                    <h4><small>@item.CalloutServices.Description</small></h4>
+                                   
+                                </div>
+                                <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                    <div class="col-4 text-md-right" style="padding-top:5px;">
+                                        <h6><strong>R @item.CalloutServices.Price <span class="text-muted">x</span>@item.Count </strong></h6>
+                                        <h5><strong>Item Total : R @(item.CalloutServices.Price*item.Count) </strong></h5>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-6">
+                                        <div class="float-right mx-1">
+                                            <a href="@Url.Action("IncreaseQTY", "CalloutReportCart", new { id = item.CalloutServiceID})">
+                                                <i class="fa fa-plus" style="color: #a721bb;font-size:20px"></i>
+                                            </a>
+
+                                        </div>
+                                        <div class="float-right mx-1">
+                                            <a href="@Url.Action("DecreaseQTY", "CalloutReportCart", new { id = item.CalloutServiceID})">
+                                                <i class="fa fa-minus" style="color: #a721bb;font-size:20px"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            
+                           @{ 
+                               servicetotal += (decimal)(item.CalloutServices.Price * item.Count);
+                           }
+
+
+                        </div><hr />
+
+                               }
+                   
+                    <h4><strong>Services Total : R @(servicetotal)</strong></h4>
+                    <h2><strong>Callout Report Total : R @(servicetotal)</strong></h2>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <button type="submit" class="btn btn-success center-block" ; style="background-color: #52eb34;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+        border-color: #008000;
+        text-align: center;
+        width: 148px;">
+            @Html.ActionLink("Proceed >>> ", "SelectVehicleCallout", "Mechanic")
+        </button>
+    }
+    else
+    { <br />
+        <br />
+        <br />
+        <h2><strong>Your Callout Report Summary is Empty :(</strong></h2>
+    }
+
+
+</form>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

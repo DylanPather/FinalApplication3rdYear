@@ -1,0 +1,226 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.ShippingTbl>
+
+@{
+    ViewBag.Title = "Shipping Address Selection";
+}
+
+<h2>Select An Address For Shipping</h2>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+
+<style>
+    tbody {
+        font-family: 'Lato', sans-serif;
+        font-size: 20px;
+        color: black;
+        padding-top: 5px;
+    }
+
+    .fas fa-list-alt {
+        color: black;
+        text-align: left;
+        justify-content: left;
+    }
+
+    .CategroyPageHeading {
+        color: #ff007d;
+        text-align: center;
+        justify-content: center;
+        font-family: Arial;
+        font-size: 21px;
+        font-weight: bold;
+    }
+
+    th {
+        background-color: white;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        color: #10727c;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        font-weight: bold;
+    }
+
+    .breadcrumb {
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0px 0 5px 0 #ff007d;
+        font-size: 18px;
+    }
+
+    .card {
+        border: 2px;
+        border-color: white;
+        box-shadow: 0px 0 6px 0 #a7ff00;
+    }
+
+    .card-header {
+        background-color: white;
+        border-radius: 20px;
+    }
+
+    ol li a {
+        color: #ff007d;
+    }
+
+    .editlabel a {
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        color: #f89800;
+    }
+
+        .editlabel a:hover {
+            font-size: 18px;
+            font-family: 'Lato', sans-serif;
+            color: #f89800;
+            font-weight: bold;
+        }
+
+    .table-responsive {
+        border-radius: 5px 5px 5px 5px;
+    }
+
+    .pagination {
+        background-color: white;
+        color: black;
+        font-size: 18px;
+        border-color: white;
+    }
+
+    .fa .fa-plus {
+        color: #ffd800;
+    }
+
+    .pageheader {
+        font-family: 'Abril Fatface', cursive;
+        font-size: 27px;
+        color: black;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .AdminCategories {
+        width: 25%;
+        height: 21%;
+    }
+
+    .btn-success:hover {
+        background-color: #ccef8a;
+    }
+    .btn-danger {
+        color: red;
+    }
+</style>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="card mb-3">
+    <div class="card-header">
+        <br />
+        <h2 class="CategroyPageHeading">Address Selection</h2>
+        <img src="~/Images/Cart Items.svg" class=" AdminCategories pull-right" />
+       
+           
+     <i class="fas fa-plus pull-left" style="font-size: 18px;color: #ff007d;"></i><a href="../ShoppingCart/AddNewAddress" class="addnew pull-left" style="font-size: 18px; color: #ff007d;font-weight:bold">Add New Shipping Address</a/>
+        
+    </div>
+
+    <div class="card-body">
+        <br />
+        <br />
+        @{
+            int count = 0;
+        }
+
+        @using (Html.BeginForm("AddressSelection", "ShoppingCart", FormMethod.Post))
+        {
+
+
+    <table class="table">
+        <tr>
+
+            <th>
+                Street Address
+            </th>
+            <th>
+                Complex/Building
+            </th>
+            <th>
+                City/Town
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Province)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Suburb)
+            </th>
+            <th>
+                Post Code
+            </th>
+            <th>
+                Select Address To Ship
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            count++;
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompBuilding)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City_Town)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Province)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Suburb)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCode)
+            </td>
+            <td>
+                @Html.RadioButton("ID", item.ShippingID, true) Select Address
+            </td>
+        </tr>
+    }
+
+    </table>
+            if (count > 0)
+            {
+                <input type="submit" value="Submit" class="btn btn-success center-block" ; style="background-color: #52eb34;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+        border-color: #008000;
+        text-align: center;
+        width: 148px;" />
+            }
+
+            <a class="btn btn-danger" href=@Url.Action("CheckoutDetail", "ShoppingCart") style="background-color: #e5280f;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 148px;">Go Back</a>
+        }
+
+    </div>
+         </div>
+            

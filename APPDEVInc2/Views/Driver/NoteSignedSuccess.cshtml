@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Contact Us Successful";
+    Layout = "~/Views/Shared/_LayoutDriverOrder.cshtml";
+
+}
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+</head>
+<style>
+    body {
+        text-align: center;
+       
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        font-size: 16px;
+        font-family: 'Lato', sans-serif;
+        color: black;
+    }
+
+    h2 {
+        color: #81e825;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #000000;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        margin: 0;
+    }
+
+    i {
+        color: #81e825;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left: -15px;
+    }
+
+    .card {
+        position: center;
+        background-color: white;
+        max-width: 90%;
+        margin: 93px auto 46px;
+        padding: 60px 80px 60px 80px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+        border-top: 10px solid #81e825;
+    }
+
+    a {
+        color: #81e825;
+        font-size: 18px;
+    }
+
+        a:hover {
+            color: #f45702;
+        }
+</style>
+
+<body>
+    <div class="card">
+        <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+            <i class="checkmark">✓</i>
+        </div>
+        <h2>Success Signature Captured</h2>
+        <p>Delivery Note Signed By Customer<br />Thank you.</p>
+        <br />
+        <div style="font-family:'Lato', sans-serif;">
+            @Html.ActionLink("Go To Deliveries Pending", "ViewDeliveries", "Driver")
+        </div>
+    </div>
+</body>

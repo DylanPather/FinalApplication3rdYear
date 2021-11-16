@@ -1,0 +1,153 @@
+﻿@model APPDEVInc2.ViewModels.Admin.QuotationCartViewModel
+
+@{
+    ViewData["Title"] = "Cart |";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<partial name="_StatusMessage" model="@Model.CartTotal" />
+<form method="post">
+    @{
+        decimal tyrestotal  = 0;
+        decimal servicetotal = 0;
+    }
+    @if (Model.CartItems.Count > 0)
+    {
+        <br />
+        <input id="userId" asp-for="@Model.CartItems[0].CID" hidden />
+
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Quotation Summary
+                    </div>
+                    <div class="col-6 text-right">
+                        <input type="button" class="btn btn-info btn-sm" value="Continue Quotation" onclick="location.href='@Url.Action("Index", "Customer")'" />
+
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.CartItems)
+                    {
+
+
+
+                        <div class="row">
+                            @if (item.StockTbl.ServiceID == 1)
+                            {
+                                <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                    <h4><strong>@item.StockTbl.TyresTbl.TyreSize</strong></h4>
+                                    <h4><small>@item.StockTbl.TyresTbl.TyreName</small></h4>
+                                    <h4><small>@item.StockTbl.TyresTbl.TyreBrand</small></h4>
+                                </div>
+                                <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                    <div class="col-4 text-md-right" style="padding-top:5px;">
+                                        <h6><strong>R @item.StockTbl.TyresTbl.SellingPrice <span class="text-muted">x</span>@item.Count </strong></h6>
+                                        <h5><strong>Item Total : R @(item.StockTbl.TyresTbl.SellingPrice*item.Count) </strong></h5>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-6">
+                                        <div class="float-right mx-1">
+                                            <a href="@Url.Action("IncreaseQTY", "QuotationCart", new { id = item.StockTbl.StockID})">
+                                                <i class="fa fa-plus" style="color: #a721bb;font-size:20px"></i>
+                                            </a>
+
+                                        </div>
+                                        <div class="float-right mx-1">
+                                            <a href="@Url.Action("DecreaseQTY", "QuotationCart", new { id = item.StockTbl.StockID})">
+                                                <i class="fa fa-minus" style="color: #a721bb;font-size:20px"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2 col-sm-4 col-lg-2 text-right">
+                                        <button type="submit" class="btn btn-outline-danger" asp-action="remove" asp-route-cartId="@item.StockID">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                            @if (item.StockTbl.ServiceID != 1)
+                            {
+                                <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                    <h4><strong>@item.StockTbl.ServiceTbl.Name</strong></h4>
+                                    <h4><small>@item.StockTbl.ServiceTbl.Description</small></h4>
+
+                                </div>
+                                <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                    <div class="col-4 text-md-right" style="padding-top:5px;">
+                                        <h6><strong>R @item.StockTbl.ServiceTbl.Price <span class="text-muted">x</span>@item.Count </strong></h6>
+                                        <h5><strong>Item Total : R @(item.StockTbl.ServiceTbl.Price*item.Count) </strong></h5>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-6">
+                                        <div class="float-right mx-1">
+                                            <a href="@Url.Action("IncreaseQTY", "QuotationCart", new { id = item.StockTbl.StockID})">
+                                                <i class="fa fa-plus" style="color: #a721bb;font-size:20px"></i>
+                                            </a>
+
+                                        </div>
+                                        <div class="float-right mx-1">
+                                            <a href="@Url.Action("DecreaseQTY", "QuotationCart", new { id = item.StockTbl.StockID})">
+                                                <i class="fa fa-minus" style="color: #a721bb;font-size:20px"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            }
+
+
+                        </div><hr />
+                        if (item.StockTbl.ServiceID == 1)
+                        {
+                            tyrestotal += (item.StockTbl.TyresTbl.SellingPrice * item.Count);
+                        }
+                         if (item.StockTbl.ServiceID != 1)
+                        {
+                            servicetotal += (item.StockTbl.ServiceTbl.Price * item.Count);
+                        }
+                    }
+                    <h4><strong>Tyres Total : R @(tyrestotal)</strong></h4>
+                    <h4><strong>Services Total : R @(servicetotal)</strong></h4>
+                    <h2><strong>Quote Total : R @(servicetotal + tyrestotal)</strong></h2>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <button type="submit" class="btn btn-success center-block" ; style="background-color: #52eb34;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+        border-color: #008000;
+        text-align: center;
+        width: 148px;">
+            @Html.ActionLink("Proceed >> ", "CustomerSelection", "QuotationCart")
+        </button>
+    }
+    else
+    { <br />
+        <br />
+        <br />
+        <h2><strong>Your Quotation Summary is Empty :(</strong></h2>
+    }
+
+
+</form>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NRJ0BHJ95Z"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NRJ0BHJ95Z');</script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Vees Tyres and Alignment</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+
+
+    <link rel="icon" href="~/Tyre Favicon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="containernav">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                </button>
+                @Html.ActionLink("Vees Tyres and Alignment", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li> @Html.ActionLink("Home", "Index", "Home")</li>
+                    <li> @Html.ActionLink("About", "About", "Home")</li>
+                    <li> @Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li> @Html.ActionLink("Services", "Services", "Home")</li>
+                    <li> @Html.ActionLink("Tyre Catalogue", "Index", "Customer")</li>
+                    @if (User.IsInRole("Customer"))
+                    {
+        <li> @Html.ActionLink("Request Assistance", "RequestAssistance", "Customer")</li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                More Options<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li> @Html.ActionLink("View Orders", "ViewOrders", "Customer")</li>
+                                <li> @Html.ActionLink("View Request", "ViewCurrentRequests", "Customer")</li>
+                                <li> @Html.ActionLink("View Invoices", "ViewInvoices", "Customer")</li>
+                            </ul>
+                        </li>}
+
+
+                    @if (User.IsInRole("Admin"))
+                    {
+        <li> @Html.ActionLink("Dashboard", "Dashboard", "Admin")</li>}
+                    @if (User.IsInRole("Mechanic"))
+                    {
+        <li> @Html.ActionLink("Dashboard", "Dashboard", "Mechanic")</li>}
+                    @if (User.IsInRole("Driver"))
+                    {
+        <li> @Html.ActionLink("Dashboard", "Dashboard", "Driver")</li>}
+                    <li>@{Html.RenderAction("CartSummary", "ShoppingCart"); }</li>
+
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @RenderSection("Scripts", false)
+</body>
+</html>

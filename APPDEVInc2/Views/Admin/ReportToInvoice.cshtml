@@ -1,0 +1,109 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.ReportDetailTbl>
+
+
+@{
+    ViewData["Title"] = "Report To Invoice|";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<form method="post">
+   
+        <br />
+        @{ 
+            decimal total = 0;
+        }
+
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Invoice Report Summary
+                    </div>
+                    
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model)
+                    {
+
+
+
+                    <div class="row">
+
+                        @if (item.StockTbl.ServiceID == 1)
+                        {
+
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                <h4><strong>@item.StockTbl.TyresTbl.TyreSize</strong></h4>
+                                <h4><small>@item.StockTbl.TyresTbl.TyreName</small></h4>
+                                <h4><small>@item.StockTbl.TyresTbl.TyreBrand</small></h4>
+                            </div>
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                <div class="col-4 text-md-right" style="padding-top:5px;">
+                                    <h5><strong>R @item.StockTbl.TyresTbl.SellingPrice <span class="text-muted">x</span>@item.Quantity </strong></h5>
+                                </div>
+                                <div class="col-8 text-md-right" style="padding-top:5px;">
+                                    <h5><strong>Total: R @(item.StockTbl.TyresTbl.SellingPrice * item.Quantity) </strong></h5>
+                                </div>
+
+                            </div>
+
+                        }
+                        @if (item.StockTbl.ServiceID != 1)
+                        {
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-left">
+                                <h4><strong>@item.StockTbl.ServiceTbl.Name</strong></h4>
+                                <h4><small>@item.StockTbl.ServiceTbl.Description</small></h4>
+                                
+                            </div>
+                            <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                <div class="col-4 text-md-right" style="padding-top:5px;">
+                                    <h5><strong>R @item.StockTbl.ServiceTbl.Price <span class="text-muted">x</span>@item.Quantity </strong></h5>
+                                </div>
+                                <div class="col-8 text-md-right" style="padding-top:5px;">
+                                    <h5><strong>Total: R @(item.StockTbl.ServiceTbl.Price * item.Quantity) </strong></h5>
+                                </div>
+                               
+                            </div>
+                        }
+
+                    </div>
+                        <hr />
+                        total += (decimal)(item.Price * item.Quantity);
+                    }
+                    <h4><strong>Total Invoice Total: R @total</strong></h4>
+                 
+                </div>
+
+            </div>
+
+
+        </div>
+
+    
+    <a class="btn btn-danger" href=@Url.Action("ViewMechanicReports", "Admin") style="background-color: #e5280f;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 148px;">Go Back</a>
+    <a class="btn btn-danger" href=@Url.Action("PaymentMethod", "Admin") style="background-color: #0bfc03;
+        color: black;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        border-color: #9be50f;
+        text-align: center;
+        justify-content: center;
+        width: 240px;">Proceed To Payment</a>
+
+</form>

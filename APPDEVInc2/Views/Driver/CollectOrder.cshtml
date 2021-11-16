@@ -1,0 +1,169 @@
+﻿@model IEnumerable<APPDEVInc2.DataBaseModels.PayFastShipping>
+@using APPDEVInc2.Repository;
+@using APPDEVInc2.DataBaseModels;
+@{
+    ViewBag.Title = "CollectOrder";
+    Layout = "~/Views/Shared/_LayoutDriverOrder.cshtml";
+
+}
+
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<style>
+
+
+    .btn {
+        display: block;
+        border: none;
+        background-color: #34eb55;
+        color: white;
+        letter-spacing: 2px;
+        font-family: 'Lato', sans-serif;
+        font-size: 17px;
+        transition: .2s all ease-in-out;
+        border-bottom: 2px solid transparent;
+        outline: none;
+        text-align: center;
+        width: 100px;
+    }
+
+    .btn-back-button {
+        display: block;
+        border: none;
+        background-color: #07f50b;
+        color: darkseagreen;
+        letter-spacing: 2px;
+        font-family: 'Lato', sans-serif;
+        font-size: 20px;
+        transition: .2s all ease-in-out;
+        border-bottom: 2px solid transparent;
+        outline: none;
+        text-align: center;
+        width: 100px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+
+    th, td {
+        font-size: 14px;
+    }
+</style>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container-fluid">
+    @{ var item = Model; }
+    @foreach (var x in item)
+    {
+
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="row p-5">
+                        <div class="col-md-6">
+                            <img src="~/Images/Gold Pride Events Logo.png">
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <p class="font-weight-bold mb-1">Shipping ID : @x.PayFastShippingID </p>
+                            <p class="text-muted">Current Date: @DateTime.Now</p>
+                        </div>
+                    </div>
+                    <hr class="my-5">
+                    <div class="row pb-5 p-5">
+                        <div class="col-md-6">
+                            <p class="font-weight-bold mb-4">Customer Information</p>
+                            <p class="mb-1">@x.OrdersTbl.Customertbl.FirstName @x.OrdersTbl.Customertbl.Surname</p>
+
+                     <p class="mb-1">Contact No: @x.OrdersTbl.Customertbl.ContactNo</p>
+                       <p class="mb-1">Email: @x.OrdersTbl.Customertbl.EmailAddress</p>
+                        <p class="mb-1">Delivery Address: @x.ShippingTbl.StreetAddress</p>
+                        <p class="mb-1">Suburb : @x.ShippingTbl.Suburb</p>
+                   <p class="mb-1">Post Code :  @x.ShippingTbl.PostalCode</p>
+                       <p class="mb-1">Province : @x.ShippingTbl.Province</p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <p class="font-weight-bold mb-4">Invoice</p>
+                            <p class="mb-1"><span class="text-muted">OrderID :</span> @x.OrderID</p>
+                            <p class="mb-1"><span class="text-muted">Date of Order:</span> @x.OrdersTbl.DateOfOrder</p>
+                            <p class="mb-1"><span class="text-muted">Payment Type: </span>PayFast</p>
+                            <p class="mb-1"><span class="text-muted">Name: </span>PayFast Simulation</p>
+                        </div>
+                    </div>
+                    <div class="row p-5">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Item</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Name</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Brand</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">QTY</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Unit Price</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Total</th>
+                                    </tr>
+                                </thead>
+                             
+                                <tbody>
+                                    @{ 
+                                        GenericUnitOfWork _unitofwork = new GenericUnitOfWork();
+                                        var orderid = _unitofwork.GetRepositoryInstance<OrderDetailsTbl>().GetAllRecordsIQueryable().Where(a => a.OrderID == x.OrderID).ToList();
+
+                                    }
+                                     @foreach (var y in orderid)
+        {
+                                    <tr>
+                                        <td>@y.StockTbl.TyresTbl.TyreID</td>
+                                        <td>@y.StockTbl.TyresTbl.TyreSize</td>
+                                        <td>@y.StockTbl.TyresTbl.TyreName</td>
+                                        <td>@y.StockTbl.TyresTbl.TyreBrand</td>
+                                        <td>@y.Quantity</td>
+                                        <td>@y.Price</td>
+                                        <td>R @(y.StockTbl.Price * y.Quantity)</td>
+                                    </tr>
+        }
+                                    
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse bg-dark text-white p-4">
+
+                        <div class="py-3 px-5 text-right">
+                            <div class="mb-2">Grand Total(VAT Incl)</div>
+                            <div class="h2 font-weight-light">R @(x.OrdersTbl.TotalPrice + x.OrdersTbl.DeliveryCost)</div>
+
+                        </div>
+
+                        <div class="py-3 px-5 text-right">
+                            <div class="mb-2">VAT(15%)</div>
+                            <div class="h2 font-weight-light">R @x.OrdersTbl.VAT</div>
+                        </div>
+                        <div class="py-3 px-5 text-right">
+                            <div class="mb-2">Sub - Total amount Without VAT</div>
+                            <div class="h2 font-weight-light">R @(x.OrdersTbl.TotalPrice - @x.OrdersTbl.VAT)</div>
+                        </div>
+                        <div class="pull-left">
+                            <h1> @Html.ActionLink("Capture Pick Up", "PickUpCapture", new { id = x.PayFastShippingID})</h1>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    <div class="text-light mt-5 mb-5 text-center small">by : <a class="text-light" target="_blank" href="">Vees Tyre and Alignment © </a></div>
+
+</div>
